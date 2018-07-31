@@ -143,8 +143,6 @@ rout,Setup(§ext,§dir)
   jtBoite[n)03]_X=60
   jtBoite[n)03]_Y=100
 
-  lanc,InitMenu,[juCartEP]\initMenu
-
   lanc,Verif,[epUtil]\verif
 
   mnu
