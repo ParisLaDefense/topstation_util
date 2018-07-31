@@ -98,10 +98,8 @@ rout,Setup(§ext,§dir)
   jtMenu[§ext][§l]"¹Utilitaires¹"=
   jtIcon[§ext][§l]a"¹Appliquer un plan d'EDDV¹"={epUtil}\icon\hbAppPlanEdv.bmp
   jtMenu[§ext][§l]a"¹Appliquer un plan d'EDDV¹"=lanc,Fenetre,{epUtil}\hbAppPlanEdv{ex}
-/*  jtIcon[§ext][§l]b"¹Appliquer plan d'EDDV Z inf¹"={epUtil}\icon\hbAppPzinf.bmp */
-/*  jtMenu[§ext][§l]b"¹Appliquer plan d'EDDV Z inf¹"=lanc,Fenetre,{epUtil}\hbAppPzinf{ex}  */
-/*  jtIcon[§ext][§l]c"¹Appliquer plan d'EDDV Z sup¹"={epUtil}\icon\hbAppPzsup.bmp */
-/*  jtMenu[§ext][§l]c"¹Appliquer plan d'EDDV Z sup¹"=lanc,Fenetre,{epUtil}\hbAppPzsup{ex} */   
+  jtMenu[§ext][§l]b"¹Tableau de bord des plans¹"=lanc,LancTdb,{epUtil}\epEdvTdb{ex}
+  jtMenu[§ext][§l]c""=
   jtIcon[§ext][§l]d"¹Tracer FCL du plan Z inf¹"={epUtil}\icon\hbTraFCLPzinf.bmp
   jtMenu[§ext][§l]d"¹Tracer FCL du plan Z inf¹"=lanc,Fenetre,{epUtil}\hbTraFCLPzinf{ex}  
   jtIcon[§ext][§l]e"¹Tracer FCL du plan Z sup¹"={epUtil}\icon\hbTraFCLPzsup.bmp
@@ -113,7 +111,6 @@ rout,Setup(§ext,§dir)
   jtMenu[§ext][§l]h"¹Contrôle du tracé des coupes h. de volumes¹"=lanc,Fenetre,{epUtil}\hbCtrTraCoup{ex}
   jtIcon[§ext][§l]i"¹Retraiter pts supports¹"={epUtil}\icon\hbRetraitPtSup.bmp
   jtMenu[§ext][§l]i"¹Retraiter pts supports¹"=lanc,Prep,{epUtil}\hbRetraitPtSup{ex}  
-  jtMenu[§ext][§l]j"¹Tableau de bord des plans¹"=lanc,LancTdb,{epUtil}\epEdvTdb{ex}
   §l=[chr(asc(§l)+1)]
   
   jtMenu[§ext][§l]"¹Coupes verticales d'EDDV¹"=
