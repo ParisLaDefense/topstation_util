@@ -1,4 +1,4 @@
-proc,JtDebug=1
+proc,JtDebug=0
 
 /* Utilisation de la boite à outils graphique EPADESA 					  */
 /*    et autres nécessaire à celles-ci                					  */
@@ -31,7 +31,8 @@ rout,Prep
 	else
 	{
 		impr
-		impr,Compléter d'abord les attributs du plan ci-dessus
+		impr,Associer d'abord un domaine unique au plan ci-dessus
+		impr,et y rajouter les composants devant figurer dans ce plan.
 		list
 		afli,imp=[%DFO:IMP],file="[base]\LISTING.txt"
 	}
@@ -39,41 +40,23 @@ rout,Prep
 
 rout,VerifPlan
 {
-	if,"[jtMatPlan]&d0:>>`+`"
+	if,"app_sel(jtMatPlan,`!ral(D)`)"
 	{
-		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" comportant plus d'un domaine)
+		if,"[jtMatPlan]&d0:>>`+`"
+		{
+			hbOui=0
+			impr,plan "[[jtMatPlan]&v0:nom]" comportant plus d'un domaine
+		}
+		else
+		{
+			DOM=[[jtMatPlan]&d0:]
+		}
 	}
 	else
 	{
-		DOM=[[jtMatPlan]&d0:]
-	}
-	if,"[jtMatPlan]&t5:date==``"
-	{
 		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" sans attribut &t5:date
+		impr,plan "[[jtMatPlan]&v0:nom]" ne comportant pas de domaine		
 	}
-	if,"[jtMatPlan]&t6:nordre==``"
-	{
-		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" sans attribut &t6:nordre <Référence EPADESA du plan>
-	}
-	if,"[jtMatPlan]&t6:Emetteur==``"
-	{
-		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" sans attribut &t6:Emetteur <Identifiant de l'émetteur du document>
-	}
-	if,"[jtMatPlan]&t10:dossier==``"
-	{
-		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" sans attribut &t10:dossier <Référence interne du cabinet>
-	}
-	if,"[jtMatPlan]&q0:Io==``"
-	{
-		hbOui=0
-		impr,plan "[[jtMatPlan]&v0:nom]" sans attribut &q0:Io <Organisme ayant créé le plan>
-	}
-	
 }
 
 rout,MajListe
@@ -139,27 +122,39 @@ rout,CreeFenetre		/* Repiquage de la routine de ent_pofonc.src de l'EPADESA	*/
   §h=[§h+Ht]                                                                     /* nouvelle ligne */
   qc,tx,TX_VIR,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Doc. de référence : ¹"
   §c=[§c+§lgauche+§cref]
-  Vir=[[jtMatPlan]&t6:Emetteur]-[[jtMatPlan]&t6:nordre]
+  Vir={}
+  if,"[[jtMatPlan]&t6:Emetteur><``]@[[jtMatPlan]&t6:nordre><``]"
+  {
+    Vir=[[jtMatPlan]&t6:Emetteur]-[[jtMatPlan]&t6:nordre]
+  }
   /*************************/
-  qc,ed,ED_VIR,[§c],[§h],[§lcentre],[Hc],tx={Vir}
+  qc,ed,ED_VIR,[§c],[§h],[§lcentre],[Hc],tx={Vir},cint=vv,rout=VerifChamps
   qdim,TX_VIR,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,ED_VIR,dx=0.00,dy=0.00,dl=1.00,dh=0.00
   §h=[§h+Ht]                                                                     /* nouvelle ligne */
   §c=[§cref]
   qc,tx,TX_VID,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Date du document : ¹"
   §c=[§c+§lgauche+§cref]
-  Vid=[[jtMatPlan]&t5:date]
+  Vid={}
+  if,"[jtMatPlan]&t5:date><``"
+  {
+    Vid=[[jtMatPlan]&t5:date]
+  }
   /***********************/
-  qc,ed,ED_VID,[§c],[§h],[§lcentre],[Hc],tx={Vid}
+  qc,ed,ED_VID,[§c],[§h],[§lcentre],[Hc],tx={Vid},cint=vv,rout=VerifChamps
   qdim,TX_VID,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,ED_VID,dx=0.00,dy=0.00,dl=1.00,dh=0.00
   §h=[§h+Ht]                                                                     /* nouvelle ligne */
   §c=[§cref]
   qc,tx,TX_VIO,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Organisme : ¹"
   §c=[§c+§lgauche+§cref]
-  Vio=[[jtMatPlan]&q0:Io]
+  Vio={}
+  if,"[jtMatPlan]&q0:Io><``"
+  { 
+	Vio=[[jtMatPlan]&q0:Io]
+  }
   /*********************/
-  qc,ed,ED_VIO,[§c],[§h],[§lcentre],[Hc],tx={Vio}
+  qc,ed,ED_VIO,[§c],[§h],[§lcentre],[Hc],tx={Vio},cint=vv,rout=VerifChamps
   qdim,TX_VIO,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,ED_VIO,dx=0.00,dy=0.00,dl=1.00,dh=0.00
   §h=[§h+Ht]                                                                     /* nouvelle ligne */
@@ -181,11 +176,15 @@ rout,CreeFenetre		/* Repiquage de la routine de ent_pofonc.src de l'EPADESA	*/
   qc,tx,TX_LBLCMP,[§c],[§h],140,[Hc],ft=2,j=2,tx="¹Composants complétés par: ¹"
   §h=[§h+Ht]                                            /* nouvelle ligne : organisme ayant saisi */
   §c=[§cref]
-  qc,tx,TX_IO,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Cabinet : ¹"
+  qc,tx,TX_IO,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Organisme : ¹"
   §c=[§c+§lgauche+§cref]
-  Io=[epUsr]
+  Io={}
+  if,"defprc(`epUsr`)"
+  {
+	Io=[epUsr]
+  }
   /********/
-  qc,ed,ED_IO,[§c],[§h],[§lcentre],[Hc],tx=[Io],cint=vv
+  qc,ed,ED_IO,[§c],[§h],[§lcentre],[Hc],tx=[Io],cint=vv,rout=VerifChamps
   qdim,TX_IO,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,ED_IO,dx=0.00,dy=0.00,dl=1.00,dh=0.00
   §h=[§h+Ht]                                                         /* nouvelle ligne : nature */
@@ -205,20 +204,33 @@ rout,CreeFenetre		/* Repiquage de la routine de ent_pofonc.src de l'EPADESA	*/
   §c=[§cref]
   qc,tx,TX_IR,[§c],[§h],[§lgauche],[Hc],j=8,tx="¹Référence interne du cab. : ¹"
   §c=[§c+§lgauche+§cref]
-  Ir=[[jtMatPlan]&t10:dossier]
+  Ir={}
+  if,"[jtMatPlan]&t10:dossier><``"
+  { 
+    Ir=[[jtMatPlan]&t10:dossier]
+  }
   /*********************/
   qc,ed,ED_IR,[§c],[§h],[§lcentre],[Hc],tx={Ir}
   qdim,TX_IR,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,ED_IR,dx=0.00,dy=0.00,dl=1.00,dh=0.00
   §h=[§h+Ht+§href]                                                     /* nouvelle ligne : boutons */
   §c=[§cref]
-  qc,bf,BF_BEOK,[§c],[§h],20,[Hc],j=5,tx="¹OK¹",rout=BfBeok
+  qc,bf,BF_BEOK,[§c],[§h],20,[Hc],j=5,tx="¹OK¹",rout=BfBeok,iv=1
   qc,bf,BF_AIDE,[§lf-§cref-32],[§h],32,[Hc],j=5,tx="¹Aide¹",rout=BfAide
   qdim,BF_BEOK,dx=0.00,dy=0.00,dl=0.00,dh=0.00
   qdim,BF_AIDE,dx=1.00,dy=0.00,dl=0.00,dh=0.00
   
   evnt,entr=BfBeok,bdro=BfBeok
   qset,foc=OP_RAD,mod=0
+  run,VerifChamps
+}
+
+rout,VerifChamps
+{
+	if,"[tx(ED_VIR)><``]@[tx(ED_VID)><``]@[tx(ED_VIO)><``]@[tx(ED_IO)><``]"
+	{
+		qmod,BF_BEOK,iv=0
+	}
 }
 
 rout,BfBeok
@@ -546,7 +558,7 @@ rout,RalV59
 		}
 		else
 		{
-			ral,[mm]&V59:mori=[mm]
+			ral,[mm]&V59:mori="[mm]"
 		}
 		if,"hbTemp"
 		{
