@@ -3,29 +3,28 @@ RETRAITE LES POINTS SUPPORTS DU FONCIER SELON LE PLAN APPLIQUE
 	
 	Cette fonction permet  de retraiter tous les points supports des composants du foncier ayant le domaine 
 	de ce plan, de les remplacer, les renommer si nécessaire et également de compléter les attributs demandés 
-	par l'EPADESA. Bien sûr, si certains attributs de points supports sont déjà renseignés, ils ne seront pas 
-	modifiés. Les points de justifications des composants du foncier ne seront pas traités.
+	par PARIS-LA-DEFENSE. Bien sûr, si certains attributs de points supports sont déjà renseignés, ils ne 
+	seront pas modifiés. Les points de justifications des composants du foncier ne seront pas traités.
 	
-	Préalablement à l'exécution de la fonction, si nécessaire, il est demandé de compléter le composant 
-	définissant le plan en vigueur de radical "jtPlan" par les attributs:	
-		&t5:date	
-		&t6:nordre <Référence EPADESA du plan>	
-		&q0:Io <Organisme ayant créé le plan>	
-	De plus, le plan ne doit être associé qu'à un seul domaine.	
-	Il est suggéré aussi de préciser l'attribut &t6:ref <Référence interne au cabinet>.	
-	
+	Le plan ne doit être associé qu'à un seul domaine, et les composants à traiter (limites, zones...) doivent 
+	avoir le domaine de ce plan.
 	
 	Une fenêtre de dialogue demande certaines valeurs des attributs à compléter:	
+	
 	     - 	Nature: en général on laissera "point support", sauf pour un plan de division où on choisira "Sommet 
 		arpenté";	
 	     -	Ecart-type;	
-	     -	Doc de référence: la référence du plan en vigueur est proposée;	
-	     -	Date du document: la date du plan en vigueur est proposée;	
-	     -	Organisme: l'organisme ayant créé le plan en vigueur est proposé;	
-	     -	Projection: le Lambert France Nord est proposé par défaut;	
-	     -	Cabinet: la valeur contenue dans la variable epUsr est proposée;	
-	     -	Forme de la saisie: par défaut, coordonnées établies par digitalisation;	
-	     -	Référence interne du cabinet: par défaut, l'attribut &t6:ref du plan de radical "jtPlan" appliqué.	
+	Origine commune des sommets:		
+	     -	Doc de référence:   la référence du plan ayant créé les composants;	
+	     -	Date du document:   la date du plan ayant créé les composants;	
+	     -	Organisme:   l'organisme ayant dressé le plan qui a créé les composants;	
+	     -	Projection:   le Lambert France Nord est proposé par défaut;	
+	Composants complétés par:	
+	     -	Cabinet:   la valeur contenue dans la variable epUsr est proposée;	
+	     -	Forme de la saisie:   par défaut, coordonnées établies par digitalisation;	
+	     -	Référence interne du cab.:   la référence du dossier du cabinet qui complète ces composants.	
+
+	Tous les champs à l'exception du dernier doivent être remplis, faute de quoi le bouton <OK> sera inopérant.	
 	
 	En appuyant sur le bouton <Ok>, le programme va d'abord sélectionner tous les points supports 
 	des composants du foncier ayant le domaine de ce plan.	
@@ -36,16 +35,30 @@ RETRAITE LES POINTS SUPPORTS DU FONCIER SELON LE PLAN APPLIQUE
 	Enfin, il va compléter les attributs manquants par ceux ci-dessus pré-définis.	
 	D'autres attributs, s'ils sont manquants, sont complétés d'office comme suit:	
 	     -	Complément nature: la valeur "Inconnu" est appliquée;		
-	     -	Matricule (d'origine): le matricule du sommet en cours est enregistré;	
+	     -	Matricule (d'origine): valeur de l'attribut "&t1:idp";	
 	     -	Positions X et Y (d'origine): les valeurs X et Y du sommet en cours sont reprises;		
 	     -	Dernière modif.: la date contenue dans l'origine du sommet en cours.	
 	
-	A la fin de l'opération, un listing des traitements est édité.			
+	A la fin de l'opération, un listing des traitements est édité.	
+	
+			
 
 ORDRE PREFERENTIEL DE RETRAITEMENT
 	
 	L'ordre sera de façon logique des plans les plus anciens aux plans les plus récents, et dans une série de plans 
 	d'un EDDV, d'abord le plan d'assiette, puis les plans par niveaux du tréfonds au zénith.	
+	
+	
+PRE-REMPLISSAGE DES CHAMPS PAR LES ATTRIBUTS DU jtPlan
+	
+Un composant jtPlan formaté pour PARIS-LA-DEFENSE doit posséder certains attributs. S'ils sont correctement remplis, 
+alors les valeurs suivantes sont reprises pour le retraitement des points supports:
+
+	     -	Doc de référence: [jtPlan.[i]&t6:emetteur]-[jtPlan.[i]&t6:nordre];	
+	     -	Date du document: [jtPlan.[i]&t5:date];	
+	     -	Organisme: [jtPlan.[i]&q0:Io];		
+	     -	Référence interne du cab.:[jtPlan.[i]&t10:dossier].	
+	
 	
 POUR NE MODIFIER QUE CERTAINS ATTRIBUTS
 	
@@ -53,3 +66,5 @@ POUR NE MODIFIER QUE CERTAINS ATTRIBUTS
 	voulus, puis éventuellement utiliser les boutons <Répercuter> pour justement répercuter des attributs sur 
 	d'autres sommets.	
 	
+	
+
